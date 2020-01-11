@@ -17,7 +17,7 @@ import random
 
 
 # ==== 设定抢购时间 （修改此处，指定抢购时间点）====
-BUY_TIME = "2018-10-14 19:31:30"
+BUY_TIME = "2020-01-11 23:00:30"
 
 
 
@@ -28,7 +28,7 @@ current_retry_login_times = 0
 login_success = False
 buy_time_object = datetime.datetime.strptime(BUY_TIME, '%Y-%m-%d %H:%M:%S')
 
-now_time = datetime.datetime.now()
+now_time = datetime.datetime.strptime(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),'%Y-%m-%d %H:%M:%S');
 if now_time > buy_time_object:
     print("当前已过抢购时间，请确认抢购时间是否填错...")
     exit(0)
@@ -67,13 +67,13 @@ def login():
         __login_operates()
         if login_success:
             print("登录成功")
-            break;
+            break
         else:
             print("等待登录中...")
 
     if not login_success:
         print("规定时间内没有扫码登录淘宝成功，执行失败，退出脚本!!!")
-        exit(0);
+        exit(0)
     
 
 
@@ -85,13 +85,18 @@ def __refresh_keep_alive():
     #重新加载购物车页面，定时操作，防止长时间不操作退出登录
     driver.get("https://cart.taobao.com/cart.htm")
     print("刷新购物车界面，防止登录超时...")
-    time.sleep(60)
+    time.sleep(10)
 
 
 def keep_login_and_wait():
     print("当前距离抢购时间点还有较长时间，开始定时刷新防止登录超时...")
     while True:
-        currentTime = datetime.datetime.now()
+        currentTime = datetime.datetime.strptime(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),'%Y-%m-%d %H:%M:%S')
+        print("商品抢购时间：" + str(buy_time_object))
+        print("当前时间：" + str(currentTime))
+
+        print("当前时间与抢购时间差："+ str(buy_time_object-currentTime))
+
         if (buy_time_object - currentTime).seconds > 180:
             __refresh_keep_alive()
         else:
@@ -156,4 +161,3 @@ def buy():
 login()
 keep_login_and_wait()
 buy()
- 
