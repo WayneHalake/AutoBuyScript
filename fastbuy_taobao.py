@@ -17,7 +17,7 @@ import random
 
 
 # ==== 设定抢购时间 （修改此处，指定抢购时间点）====
-BUY_TIME = "2020-01-11 23:00:30"
+BUY_TIME = "2020-01-12 12:23:00"
 
 
 
@@ -92,10 +92,10 @@ def keep_login_and_wait():
     print("当前距离抢购时间点还有较长时间，开始定时刷新防止登录超时...")
     while True:
         currentTime = datetime.datetime.strptime(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),'%Y-%m-%d %H:%M:%S')
-        print("商品抢购时间：" + str(buy_time_object))
-        print("当前时间：" + str(currentTime))
+        # print("商品抢购时间：" + str(buy_time_object))
+        # print("当前时间：" + str(currentTime))
 
-        print("当前时间与抢购时间差："+ str(buy_time_object-currentTime))
+        # print("当前时间与抢购时间差："+ str(buy_time_object-currentTime))
 
         if (buy_time_object - currentTime).seconds > 180:
             __refresh_keep_alive()
@@ -132,14 +132,15 @@ def buy():
             retry_submit_times = retry_submit_times + 1
 
             try:
-                #点击结算按钮
+                # 点击结算按钮
                 if driver.find_element_by_id("J_Go"):
+                    # todo 点击结算按钮成功与否做判断
                     driver.find_element_by_id("J_Go").click()
                     print("已经点击结算按钮...")
                     click_submit_times = 0
                     while True:
                         try:
-                            if click_submit_times < 10:
+                            if click_submit_times < 50:
                                 driver.find_element_by_link_text('提交订单').click()
                                 print("已经点击提交订单按钮")
                                 submit_succ = True
